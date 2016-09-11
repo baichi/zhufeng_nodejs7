@@ -99,3 +99,4 @@ Buffer.myConcat = function (list, length) {
 console.log(Buffer.myConcat([buf1,buf2,buf3],100).toString());
 
 //作业 写一个concat方法
+

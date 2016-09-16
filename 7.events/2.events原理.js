@@ -24,16 +24,17 @@ EventEmitter.prototype.emit = function (eventsName) {
 EventEmitter.prototype.once = function (eventName,listener) {
     //先绑定，执行后移除掉此函数
     function remove(){
-        listener.apply(null,arguments);
+        listener.apply(this,arguments);
         //当函数执行完后移除掉自己
         this.removeListener(eventName, remove);
-    };
+    }
+    remove.l = listener;//将真实的函数绑定在绑定的remove方法上
     this.on(eventName, remove);//先绑定
 };
 EventEmitter.prototype.removeListener = function (eventsName,callback) {
     //删除对应数组中的callback
     this._events[eventsName] = this._events[eventsName].filter(function (item) {
-        return item!=callback;//返回false是过滤掉
+        return item!=callback&&item.l!=callback;//返回false是过滤掉
     });
 };
 

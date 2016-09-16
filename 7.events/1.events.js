@@ -12,7 +12,12 @@ function noMoney(who) {
 function die(who) {
     console.log(who+'死了');
 }
-girl.on('我要没钱了',noMoney);
+//addListener方法和on一样
+girl.once('我要没钱了',noMoney);
 girl.on('我要没钱了',die);
 //发射事件
+
+//删除绑定的事件,删除单一绑定
+girl.removeListener('我要没钱了',die);
+girl.emit('我要没钱了','红太郎');
 girl.emit('我要没钱了','红太郎');

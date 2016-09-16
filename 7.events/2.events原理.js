@@ -20,6 +20,14 @@ EventEmitter.prototype.emit = function (eventsName) {
         item.apply(this,args);//当前函数执行并传入参数
     });
 };
+
+EventEmitter.prototype.removeListener = function (eventsName,callback) {
+    //删除对应数组中的callback
+    this._events[eventsName] = this._events[eventsName].filter(function (item) {
+        return item!=callback;//返回false是过滤掉
+    });
+};
+
 var girl = new EventEmitter();
 function noMoney(who) {
     console.log(who+'没钱了');
@@ -30,4 +38,5 @@ function die(who) {
 girl.on('我要没钱了',noMoney);
 girl.on('我要没钱了',die);
 //发射事件
+girl.removeListener('我要没钱了',die);
 girl.emit('我要没钱了','红太郎');

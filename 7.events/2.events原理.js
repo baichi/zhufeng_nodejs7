@@ -20,7 +20,16 @@ EventEmitter.prototype.emit = function (eventsName) {
         item.apply(this,args);//当前函数执行并传入参数
     });
 };
-
+//多次执行只触发一次
+EventEmitter.prototype.once = function (eventName,listener) {
+    //先绑定，执行后移除掉此函数
+    function remove(){
+        listener.apply(null,arguments);
+        //当函数执行完后移除掉自己
+        this.removeListener(eventName, remove);
+    };
+    this.on(eventName, remove);//先绑定
+};
 EventEmitter.prototype.removeListener = function (eventsName,callback) {
     //删除对应数组中的callback
     this._events[eventsName] = this._events[eventsName].filter(function (item) {
@@ -35,8 +44,10 @@ function noMoney(who) {
 function die(who) {
     console.log(who+'死了');
 }
-girl.on('我要没钱了',noMoney);
+girl.once('我要没钱了',noMoney);
 girl.on('我要没钱了',die);
 //发射事件
 girl.removeListener('我要没钱了',die);
+girl.removeListener('我要没钱了',noMoney);//此时无法删除了
+girl.emit('我要没钱了','红太郎');
 girl.emit('我要没钱了','红太郎');

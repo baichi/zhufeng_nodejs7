@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body>
+<div id="drag">
+    将文件拖拽到区域中
+</div>
+<table class="table table-responsive">
+    <tr>
+        <th>文件名称</th>
+        <th>文件大小</th>
+        <th>文件类型</th>
+    </tr>
+    <tr>
+        <td id="filename"></td>
+        <td id="filesize"></td>
+        <td id="filetype"></td>
+    </tr>
+</table>
+<button id="upload" class="btn btn-primary btn-lg">上传</button>
+<table class="table table-responsive">
+    <tr>
+        <th>已上传</th>
+        <th>剩余时间</th>
+        <th>上传速度</th>
+    </tr>
+    <tr>
+        <td id="loaded"></td>
+        <td id="liveTime"></td>
+        <td id="uploadSpeed"></td>
+    </tr>
+</table>
+<div>进度</div>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+    </div>
+</div>
+<style>
+    #drag{
+        width: 40%;
+        height: 200px;
+        text-align: center;
+        line-height: 200px;
+        outline: 1px dashed #a1a1a1;
+        margin-left: 30%;
+    }
+</style>
+<script>
+    drag.ondragover = function (e) {
+        e.preventDefault();
+        //当在drag盒子上悬停的时候，阻止默认事件
+    };
+    var file = '';
+    function changeSize(size) {
+        if(size>1024*1024*1024){
+            return (size/1024/1024/1024).toFixed(2)+'G'
+        }else if(size>1024*1024){
+            return (size/1024/1024).toFixed(2)+'MB'
+        }else if(size>1024){
+            return (size/1024).toFixed(2)+'kb'
+        }else{
+            return size+'b'
+        }
+    }
+    drag.ondrop = function (e) {
+        e.preventDefault();
+        //松开手的时候要组织默认事件
+        //需要获取文件的名称，大小，类型
+        file = e.dataTransfer.files[0];
+        filename.innerHTML = file.name;
+        filesize.innerHTML = changeSize(file.size);
+        filetype.innerHTML = file.type;
+    };
+    //点击上传
+    upload.onclick = function () {
+        var xhr = new XMLHttpRequest();
+        //使用formDate 上传文件
+        xhr.open('POST','/upload',true);
+        //监听上传进度
+        var prev = 0;
+        xhr.upload.onprogress = function (e) {
+           /* console.log(e.loaded);//以上传的进度
+            console.log(e.total); //总共的*/
+            var percent = e.loaded/e.total*100;
+            //可预算剩余多长时间，每秒多长时间，已经上传多少
+            loaded.innerHTML = changeSize(e.loaded);
+            liveTime.innerHTML = (e.total-e.loaded)/((e.loaded - prev)*10);
+            uploadSpeed.innerHTML =(e.loaded - prev)*10;
+            prev = e.loaded;
+            var pro = document.querySelector('.progress-bar');
+            pro['aria-valuenow'] = percent;
+            pro.style.width = percent+'%';
+
+        }
+        xhr.onload = function () {
+            alert(xhr.response);
+        }
+        var fd = new FormData(); //构建formData
+        fd.append('f',file); //将数据放入fd中
+        fd.append('no','nothings');
+        xhr.send(fd);//发送给服务器端
+    }
+</script>
+</body>
+</html>

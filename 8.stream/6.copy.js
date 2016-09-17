@@ -3,5 +3,5 @@ var fs = require('fs');
 function copy(source,target) {
     fs.createReadStream(source).pipe(fs.createWriteStream(target));
 }
-copy('./read.txt','./read1.txt');
-//小文件可以使用readfile 大文件需要使用流（异步方法）
+copy('./read.txt', './read1.txt');
+//小文件可以使用readFile 大文件需要使用流（异步方法）

@@ -28,7 +28,7 @@ var app = http.createServer(function (req,res) {
                 req.on('end',function () {
                      //查询字符串a=1&b=2  {a:1,b:2}
                     var obj = querystring.parse(str);
-                    obj.id = Math.random();//给每一用户发一个身份证
+                    obj.id = Math.random();
                     user.push(obj);
 
                     //注册成功后将所有用户返回给客户端

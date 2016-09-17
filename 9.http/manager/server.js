@@ -27,7 +27,10 @@ var app = http.createServer(function (req,res) {
                 });
                 req.on('end',function () {
                      //查询字符串a=1&b=2  {a:1,b:2}
-                    user.push(querystring.parse(str));
+                    var obj = querystring.parse(str);
+                    obj.id = Math.random();//给每一用户发一个身份证
+                    user.push(obj);
+
                     //注册成功后将所有用户返回给客户端
                     res.end(JSON.stringify(user));
                     //跳转页面 设置跳转头
@@ -39,6 +42,13 @@ var app = http.createServer(function (req,res) {
                 });
                 break;
             case 'DELETE':
+                //找到要删除的某一个通过索引进行删除
+                var id = urlObj.query.id;
+                //返回过滤后的内容
+                user=user.filter(function (item,index) {
+                    return item.id!=id;
+                });
+                res.end(JSON.stringify({success:'done'}));
                 break;
         }
     }else{

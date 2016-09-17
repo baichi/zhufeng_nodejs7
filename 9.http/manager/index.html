@@ -46,13 +46,31 @@
         xhr.responseType='json';
         xhr.onload = function () {
             var data = xhr.response; //用户集合
+            console.log(data);
             var str = '';
-            data.forEach(function (item) {
-                str+=`<li class="list-group-item">${item.username}:${item.password}</li>`;
+            data.forEach(function (item,index) {
+                str+=`<li style="overflow: hidden" class="list-group-item">
+                        ${item.username}:${item.password}
+                        <button style="float: right" class="btn btn-danger" onclick="remove.call(this,${item.id})">删除</button>
+                    </li>`;
             });
             oUl.innerHTML = str;
         };
         xhr.send(serialize(myform));
+    }
+    function remove(index) {
+        var that = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE','/user?id='+index,true);
+        xhr.responseType='json';
+        xhr.onload = function () {
+            if(xhr.response.success=='done'){
+                alert('删除成功');
+                //后台删除成功后前台也要删掉
+                that.parentNode.parentNode.removeChild(that.parentNode);
+            }
+        };
+        xhr.send();
     }
 
 

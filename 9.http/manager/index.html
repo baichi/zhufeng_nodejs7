@@ -22,20 +22,37 @@
         <button id="btn" type="button" class="btn btn-primary btn-lg">注册</button>
     </div>
 </form>
+    <ul id="oUl" class="list-group">
+
+    </ul>
 </div>
 <script>
     function serialize(form) {
         //获取表单内所有元素
-        console.log(form.elements);
-        return
+        //获取表单内所有元素；
+        //将类数组转换成数组
+        var formAry=[].slice.call(form.elements);
+        var arr=[];
+        formAry.forEach(function (item) {
+            if(item.type!='text') return;
+            arr.push(`${item.name}=${item.value}`);
+        });
+        return arr.join('&');
     }
-    serialize(myform);
-    
-    
     btn.onclick = function () {
         var xhr = new XMLHttpRequest();
         xhr.open('POST','/user',true);
-        xhr.send()
+        //指定响应类型
+        xhr.responseType='json';
+        xhr.onload = function () {
+            var data = xhr.response; //用户集合
+            var str = '';
+            data.forEach(function (item) {
+                str+=`<li class="list-group-item">${item.username}:${item.password}</li>`;
+            });
+            oUl.innerHTML = str;
+        };
+        xhr.send(serialize(myform));
     }
 
 

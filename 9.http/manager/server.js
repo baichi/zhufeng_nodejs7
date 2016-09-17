@@ -28,6 +28,8 @@ var app = http.createServer(function (req,res) {
                 req.on('end',function () {
                      //查询字符串a=1&b=2  {a:1,b:2}
                     user.push(querystring.parse(str));
+                    //注册成功后将所有用户返回给客户端
+                    res.end(JSON.stringify(user));
                     //跳转页面 设置跳转头
                     /*
                     设置跳转

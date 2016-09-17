@@ -3,7 +3,7 @@ var fs = require('fs');
 var path = require('path');
 /*var mime = {
     '.html':'text/html',
-    '.js':'text/javascript',
+    '.js':'application/javascript',
     '.css':'text/css'
 };*/
 //第三方模块 mime

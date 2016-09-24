@@ -8,18 +8,18 @@ app.listen(8080);
 //3.从头到尾部req,res是同一个对象
 //4.中间件可以写多个
 //需求获取当前访问到路由的时间
-app.use('/user', function (req,res,next) {
+app.use('/user', function (req, res, next) {
     req.timer = Date.now(); // 获取第一个时间;
     end = res.end;//先将原有的方法进行保存
     res.end = function (str) { //开始装饰一个新的函数
         var newTimer = Date.now();
-        end.apply(res,[newTimer-req.timer+str]); //调用原来的函数
+        end.apply(res, [newTimer - req.timer + str]); //调用原来的函数
     };
     next();
 });
-app.get('/user/add',function (req,res) {
+app.get('/user/add', function (req, res) {
     res.end('');
 });
-app.get('/user/mny',function (req,res) {
+app.get('/user/mny', function (req, res) {
     res.end('');
 });

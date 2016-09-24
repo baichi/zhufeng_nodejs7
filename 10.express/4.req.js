@@ -1,19 +1,27 @@
-var express = require('./express');
+var express = require('express');
 var app = express();
-app.listen(3001);
+app.listen(3002);
+app.use(function (req,res,next) {
+    res.send = function (msg) {//自定义send方法
+        if(typeof msg == 'string'||Buffer.isBuffer(msg)){
+            res.setHeader('Content-Type','text/plain;charset=utf8');
+            res.end(msg);
+        }else if(typeof msg == 'object'){
+            res.setHeader('Content-Type','application/json;charset=utf8');
+            res.end(JSON.stringify(msg));
+        }else if(typeof msg =='number'){
+            var _http_server = require('_http_server').STATUS_CODES;
+            console.log(_http_server);
+            res.end(_http_server[msg]);
+        }
+    };
+    next();//扩展完方法后要调用next让其继续执行
+});
 app.get('/',function (req,res) {
-    console.log(req.path);//当前访问的路径
-    console.log(req.hostname);//当前的主机名
-    console.log(req.query);//查询字符串
-    res.end('end');
+    res.send(['name']);//默认end方法只能传入buffer或者字符串
+    //如果传入的内容是数字会装换成状态码
+    //如果是对象型号会自动的将内容装换成对象
+    //会自动设置响应头
 });
-//  /user/1/2/home/3
-app.get('/user/:id/:name/home/:address',function (req,res) {
-    //如果匹配到当前路由会在req属性上增加个params属性
-    res.end(JSON.stringify(req.params));//{id:1,name:2,address:3}
-    //1.当放入此路由时要先将id,name,address做成一个数组存起来
-    //2.当真正访问时取出id位置上代表的值，name，address在拼成一个数组
-    //3.拼成一个对象
-    //可以将原有的路径变为正则，用这个正则匹配出我们的1,2,3
-});
-//查询路径
+
+

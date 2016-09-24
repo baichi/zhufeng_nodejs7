@@ -15,5 +15,5 @@ console.log(matchers);
 var params = {};
 arr.forEach(function (item,index) {
     params[item] = matchers[index+1];
-})
+});
 console.log(params);

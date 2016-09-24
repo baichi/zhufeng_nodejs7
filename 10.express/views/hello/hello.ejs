@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<%include ./header.ejs%>
+<%=hello%>
+<%-name%>
+<ul>
+    <%if(arr){%>
+    <div>hello</div>
+    <%}else{%>
+    <div>zfpx</div>
+    <%}%>
+    <%arr.forEach(function(item){%>
+    <li><%=item%></li>
+    <%})%>
+</ul>
+
+</body>
+</html>
+

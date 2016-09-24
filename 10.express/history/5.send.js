@@ -11,6 +11,7 @@ app.use(function (req,res,next) {
             res.end(JSON.stringify(msg));
         }else if(typeof msg =='number'){
             var _http_server = require('_http_server').STATUS_CODES;
+            console.log(_http_server);
             res.end(_http_server[msg]);
         }
     };

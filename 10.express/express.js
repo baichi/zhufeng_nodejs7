@@ -5,28 +5,40 @@ function express() {
         var pathname = urlObj.pathname;
         var method = req.method.toLowerCase();
         var index = 0;
-        function next() {
+        function next(err) {
             var router = app.routers[index++]; //取出路由第一项
-            if(index>app.routers.length){
-                return res.end(`Cannot ${method} ${pathname}`);
-            }
-            if(router.method=='middleware'){ //中间件
-                //查看路由是否能匹配到
-                //1.如果路由是/的话肯定能匹配到
-                //2.如果路径完全相等可以匹配上
-                //3.如果以 路由的开头开始+'/'的则可以匹配上 /user/add /user/
-                if(router.path=='/'||router.path==pathname||pathname.startsWith(router.path+'/')){
-                    router.fn(req,res,next);
+            if(err){
+                //如果有错误了，要找到错误中间件
+                if(router.method == 'middleware'&&router.fn.length==4){
+                    //找到了错误中间件
+                    router.fn(err,req,res,next);
                 }else{
-                    next();
+                    //没找到
+                    next(err); //将错误继续传递下去
                 }
-            }else{//路由
-                if((router.path == pathname||router.path =='*') && (router.method == method|| router.method=='all')){ //如果路由匹配到
-                    router.fn(req,res);
-                }else{ //路由没有匹配到
-                    next();
+            }else{
+                if(index>app.routers.length){
+                    return res.end(`Cannot ${method} ${pathname}`);
+                }
+                if(router.method=='middleware'){ //中间件
+                    //查看路由是否能匹配到
+                    //1.如果路由是/的话肯定能匹配到
+                    //2.如果路径完全相等可以匹配上
+                    //3.如果以 路由的开头开始+'/'的则可以匹配上 /user/add /user/
+                    if(router.path=='/'||router.path==pathname||pathname.startsWith(router.path+'/')){
+                        router.fn(req,res,next);
+                    }else{
+                        next();
+                    }
+                }else{//路由
+                    if((router.path == pathname||router.path =='*') && (router.method == method|| router.method=='all')){ //如果路由匹配到
+                        router.fn(req,res);
+                    }else{ //路由没有匹配到
+                        next();
+                    }
                 }
             }
+
         }
         next();
 

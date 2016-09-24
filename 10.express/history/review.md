@@ -42,3 +42,18 @@ app.get('/user/:id/:name/:address/user',function(req,res){})
 ```
 res.send() 
 ``` 
+## ejs模板
+```
+//app.set('view engine','ejs');
+app.set('view engine','html');
+app.engine('html',require('ejs').__express);
+app.set('views',__dirname+'/path')
+res.render('tmpl',data+res.locals,function(err,data){})
+```
+## 页面中的使用
+```
+<%=%>
+<%-%>
+<%%>
+<%include path%>
+```

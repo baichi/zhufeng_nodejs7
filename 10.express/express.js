@@ -7,7 +7,7 @@ function express() {
         var index = 0;
         function next() {
             var router = app.routers[index++]; //取出路由第一项
-            if(index>=app.routers.length){
+            if(index>app.routers.length){
                 return res.end(`Cannot ${method} ${pathname}`);
             }
             if(router.method=='middleware'){ //中间件

@@ -26,8 +26,8 @@
         var that = this;
         var xhr = new XMLHttpRequest();
         xhr.open('DELETE','/user/'+id,true);
-        xhr.onload = function () {
-            that.parentNode.parentNode.parentNode.removeChild(that.parentNode.parentNode);
+        xhr.onload = function () { //xhr.status = 200 && xhr.readyState=4
+            document.querySelector('table').tBodies[0].removeChild(that.parentNode.parentNode);
         };
         xhr.send();
     }

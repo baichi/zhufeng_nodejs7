@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/lib/css/index.css">
 </head>
 <body>
-hello
-<script src="/lib/js/index.js"></script>
+<!--<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+    <input type="text" name="username">
+    <button>提交</button>
+</form>-->
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','/login',true);
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.send(JSON.stringify({name:1}));
+</script>
 </body>
 </html>

@@ -11,11 +11,18 @@ var user = [
 app.listen(3003);
 //restful
 //匹配到为传入id的
+app.get('/',function (req,res,next) {
+    res.sendFile('./home.html',{root:__dirname});
+});
 app.route('/user').get(function (req,res,next) {
-    res.render('home.html',{user:user});
+    res.send(user);
+   // res.render('home.html',{user:user}); //拿到/ 中请求路径user
 }).post(function (req,res,next) {
-}).put(function (req,res,next) {
+    user.push(req.body);
+    res.send(req.body)
 }).delete(function (req,res,next) {
+    user = [];
+    res.send({});
 });
 //匹配到传入id的
 app.route('/user/:id').get(function (req,res,next) {

@@ -16,7 +16,7 @@ function check(whiteList) {
                 next();
             }else if(whiteList.indexOf(urlObj.hostname)>-1){//当前主机允许你访问
                 next();
-            }else{
+            }else{//如果不满足，表示不允许访问 x图
                 res.sendFile('./1.jpg',{root:__dirname+'/img'});
             }
         }else{

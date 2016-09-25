@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>姓名</td>
+        <td>年龄</td>
+        <td>地址</td>
+        <td>操作</td>
+    </tr>
+    <%user.forEach(function(user){%>
+    <tr>
+        <td><%=user.name%></td>
+        <td><%=user.age%> </td>
+        <td><%=user.address%> </td>
+        <td><button onclick="del.call(this,<%=user.id%>)">删除</button></td>
+    </tr>
+    <%})%>
+</table>
+<script>
+    function del(id) {
+        var that = this;
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE','/user/'+id,true);
+        xhr.onload = function () {
+            that.parentNode.parentNode.parentNode.removeChild(that.parentNode.parentNode);
+        };
+        xhr.send();
+    }
+</script>
+</body>
+</html>
